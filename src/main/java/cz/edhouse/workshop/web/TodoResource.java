@@ -38,7 +38,7 @@ public class TodoResource {
         return todoService.save(todo);
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(path = "{id}", method = RequestMethod.PUT)
     public Todo update(@RequestBody Todo todo) {
         return todoService.save(todo);
     }
