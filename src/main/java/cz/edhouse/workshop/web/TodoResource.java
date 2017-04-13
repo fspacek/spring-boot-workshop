@@ -6,11 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -28,22 +24,29 @@ public class TodoResource {
         this.todoService = todoService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
+    @Transactional(readOnly = true)
     public List<Todo> getAll(boolean completed) {
         return todoService.getAll(completed);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public Todo create(@RequestBody Todo todo) {
         return todoService.save(todo);
     }
 
-    @RequestMapping(path = "{id}", method = RequestMethod.PUT)
-    public Todo update(@RequestBody Todo todo) {
+    @PutMapping(path = "{id}")
+    public Todo update(@PathVariable("id") int id, @RequestBody Todo todo) {
+        todo.setId(id);
         return todoService.save(todo);
     }
 
-    @RequestMapping(path = "{id}", method = RequestMethod.POST)
+    @PutMapping(path = "{id}/complete")
+    public Todo complete(@PathVariable("id") int id) {
+        return todoService.complete(id);
+    }
+
+    @PostMapping(path = "{id}")
     public void delete(@PathVariable("id") int id) {
         todoService.delete(id);
     }
